@@ -189,6 +189,7 @@ def main():
         warmup_steps=10,
         profile_steps=40,
         pl_step=25,
+        profile_path="trace.csv"
     )
 
     for epoch in range(args.epochs):
