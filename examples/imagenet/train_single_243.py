@@ -193,7 +193,7 @@ def main():
     )
 
     for epoch in range(args.epochs):
-        plo.on_epoch_begin()
+        plo.on_step_begin()
         train(train_loader, model, criterion, optimizer, epoch, args, plo)
         plo.on_epoch_end()
 
@@ -248,7 +248,7 @@ def train(
         loss.backward()
         optimizer.step()
 
-        power_limit_optimizer.on_step_end()  # Mark the end of one training step.
+        power_limit_optimizer.on_epoch_end()  # Mark the end of one training step.
 
         # measure elapsed time
         batch_time.update(time.time() - end)
