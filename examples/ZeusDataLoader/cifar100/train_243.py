@@ -151,9 +151,9 @@ def main(args: argparse.Namespace) -> None:
         optimum_selector=MaxSlowdownConstraint(
             factor=get_env("ZEUS_MAX_SLOWDOWN", float, 1.1),
         ),
-        warmup_steps=10,
-        profile_steps=40,
-        pl_step=25,
+        warmup_steps=5,
+        profile_steps=10,
+        pl_step=35,
         profile_path="trace.csv"
     )
 
