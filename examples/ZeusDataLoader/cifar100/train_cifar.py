@@ -189,16 +189,13 @@ def main(args: argparse.Namespace) -> None:
 def train(train_loader, model, criterion, optimizer, epoch, args, power_limit_optimizer):
     """Train the model for one epoch."""
     model.train()
-    num_samples = len(train_loader) * args.batch_size
-    print("length: ", len(train_loader))
+    length = len(train_loader)
+    num_samples = length * args.batch_size
 
     counter = 0
-    limit = int(len(train_loader) * 0.44)
-    print("limit: ", limit)
+    limit = int(length * 0.44)
     for batch_index, (images, labels) in enumerate(train_loader):
-        print("counter: ", counter)
         if counter > limit:
-            print("skipped")
             continue
         # power_limit_optimizer.on_step_begin()
         labels = labels.cuda()
