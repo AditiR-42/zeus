@@ -190,11 +190,12 @@ def train(train_loader, model, criterion, optimizer, epoch, args, power_limit_op
     """Train the model for one epoch."""
     model.train()
     num_samples = len(train_loader) * args.batch_size
+    print("ns: ", num_samples)
 
     counter = 0
     for batch_index, (images, labels) in enumerate(train_loader):
-        if counter % 2 != 0:
-            counter = (counter + 1) % 2
+        print("counter: ", counter)
+        if counter > num_samples * 0.44:
             continue
         # power_limit_optimizer.on_step_begin()
         labels = labels.cuda()
