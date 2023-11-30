@@ -191,7 +191,10 @@ def train(train_loader, model, criterion, optimizer, epoch, args, power_limit_op
     model.train()
     num_samples = len(train_loader) * args.batch_size
 
+    counter = 0
     for batch_index, (images, labels) in enumerate(train_loader):
+        if counter % 2 != 0:
+            continue
         power_limit_optimizer.on_step_begin()
         labels = labels.cuda()
         images = images.cuda()
@@ -201,6 +204,8 @@ def train(train_loader, model, criterion, optimizer, epoch, args, power_limit_op
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
+
+        counter = (counter + 1) % 2
 
         # power_limit_optimizer.on_epoch_end() 
 
