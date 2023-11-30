@@ -277,11 +277,11 @@ class GlobalPowerLimitOptimizer(Callback):
             pls.append(pynvml.nvmlDeviceGetPowerManagementLimitConstraints(device))
         if not all(pls[0] == pl for pl in pls):
             raise ValueError("Power limits ranges are not uniform across GPUs.")
-        # self.power_limits = list(
-        #     range(pls[0][1], pls[0][0] - self.pl_step, -self.pl_step)
-        # )
-        self.power_limits = [70000, 68000, 66000, 64000, 62000, 60000] # g4dn instance
-        # self.power_limits = [162000, 152000, 142000, 132000, 122000, 113000] # g3s instance
+        self.power_limits = list(
+            range(pls[0][1], pls[0][0] - self.pl_step, -self.pl_step)
+        )
+        # self.power_limits = [70000, 68000, 66000, 64000, 62000, 60000] # g4dn cifar instance
+        # self.power_limits = [162000, 152000, 142000, 132000, 122000, 113000] # g3s cifar instance
 
         # Turn on persistence mode and set to the highest power limit.
         try:
