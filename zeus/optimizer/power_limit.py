@@ -35,6 +35,7 @@ This module contains the following pieces:
 from __future__ import annotations
 
 import atexit
+import os
 from pathlib import Path
 from abc import ABC, abstractmethod
 
@@ -447,7 +448,8 @@ class GlobalPowerLimitOptimizer(Callback):
         if self.current_power_limit == power_limit:
             return
         for handle in self.handles:
-            pynvml.nvmlDeviceSetPowerManagementLimit(handle, power_limit)
+            # pynvml.nvmlDeviceSetPowerManagementLimit(handle, power_limit)
+            os.system("nvidia-smi %d", power_limit)
         self.current_power_limit = power_limit
 
     def _compute_optimal_power_limit(self) -> int:
