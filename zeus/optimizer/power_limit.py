@@ -280,7 +280,7 @@ class GlobalPowerLimitOptimizer(Callback):
         # self.power_limits = list(
         #     range(pls[0][1], pls[0][0] - self.pl_step, -self.pl_step)
         # )
-        self.power_limits = [60000] # g4dn cifar instance
+        self.power_limits = [62000] # g4dn cifar instance
         # self.power_limits = [113000] # g3s cifar instance
 
         # Turn on persistence mode and set to the highest power limit.
