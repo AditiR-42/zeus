@@ -196,7 +196,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, power_limit_op
         if counter % 2 != 0:
             counter = (counter + 1) % 2
             continue
-        power_limit_optimizer.on_step_begin()
+        # power_limit_optimizer.on_step_begin()
         labels = labels.cuda()
         images = images.cuda()
 
