@@ -280,7 +280,7 @@ class GlobalPowerLimitOptimizer(Callback):
         # self.power_limits = list(
         #     range(pls[0][1], pls[0][0] - self.pl_step, -self.pl_step)
         # )
-        self.power_limits = [68, 66, 64, 62, 60]
+        self.power_limits = [70, 68, 66, 64, 62, 60]
 
         # Turn on persistence mode and set to the highest power limit.
         try:
@@ -449,7 +449,7 @@ class GlobalPowerLimitOptimizer(Callback):
             return
         for handle in self.handles:
             # pynvml.nvmlDeviceSetPowerManagementLimit(handle, power_limit)
-            os.system("nvidia-smi %d", power_limit)
+            os.system(f"nvidia-smi -pl {power_limit}")
         self.current_power_limit = power_limit
 
     def _compute_optimal_power_limit(self) -> int:
