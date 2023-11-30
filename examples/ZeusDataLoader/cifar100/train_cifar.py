@@ -170,9 +170,9 @@ def main(args: argparse.Namespace) -> None:
 
     # Main training loop.
     for epoch in epoch_iter:
-        plo.on_step_begin()
+        # plo.on_step_begin()
         train(train_loader, model, criterion, optimizer, epoch, args, plo)
-        plo.on_epoch_end()
+        # plo.on_epoch_end()
 
         acc = validate(val_loader, model, criterion, epoch, args)
 
