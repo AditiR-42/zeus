@@ -280,7 +280,8 @@ class GlobalPowerLimitOptimizer(Callback):
         # self.power_limits = list(
         #     range(pls[0][1], pls[0][0] - self.pl_step, -self.pl_step)
         # )
-        self.power_limits = [70000, 68000, 66000, 64000, 62000, 60000]
+        self.power_limits = [70000, 68000, 66000, 64000, 62000, 60000] # g4dn instance
+        self.power_limits = [162000, 152000, 142000, 132000, 122000, 11300] # g3s instance
 
         # Turn on persistence mode and set to the highest power limit.
         try:
