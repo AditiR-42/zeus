@@ -320,7 +320,7 @@ class GlobalPowerLimitOptimizer(Callback):
                 next_power_limit=self.power_limits[0], steps=wait_steps + 1
             )
             self.logger.info("Set power limit to the maximum before starting.")
-            self._set_power_limit(max(self.power_limits))
+            self._set_power_limit(113000)
         else:
             self.measurements = _PowerLimitMeasurementList.parse_file(
                 self.profile_path,
