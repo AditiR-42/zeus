@@ -196,7 +196,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, power_limit_op
         loss.backward()
         optimizer.step()
 
-        power_limit_optimizer.on_epoch_end() 
+        # power_limit_optimizer.on_epoch_end() 
 
         print(
             f"Training Epoch: {epoch} [{(batch_index + 1) * args.batch_size}/{num_samples}]"
