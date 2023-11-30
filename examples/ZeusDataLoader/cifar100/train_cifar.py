@@ -152,7 +152,7 @@ def main(args: argparse.Namespace) -> None:
             factor=get_env("ZEUS_MAX_SLOWDOWN", float, 1.1),
         ),
         warmup_steps=10,
-        profile_steps=30,
+        profile_steps=40,
         pl_step=35,
         profile_path="trace.json"
     )
