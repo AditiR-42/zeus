@@ -144,7 +144,7 @@ def main(args: argparse.Namespace) -> None:
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adadelta(model.parameters())
 
-    monitor = ZeusMonitor(gpu_indices=[args.gpu])
+    monitor = ZeusMonitor(gpu_indices=[0])
 
     plo = GlobalPowerLimitOptimizer(
         monitor=monitor,
