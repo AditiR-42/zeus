@@ -279,7 +279,7 @@ class GlobalPowerLimitOptimizer(Callback):
         # self.power_limits = list(
         #     range(pls[0][1], pls[0][0] - self.pl_step, -self.pl_step)
         # )
-        self.power_limits = list(range(70, 60, -2))
+        self.power_limits = [70.0, 68.0, 66.0, 64.0, 62.0, 60.0]
 
         # Turn on persistence mode and set to the highest power limit.
         try:
