@@ -154,7 +154,7 @@ def main(args: argparse.Namespace) -> None:
         warmup_steps=10,
         profile_steps=40,
         pl_step=35,
-        profile_path="trace.json"
+        # profile_path="trace.json"
     )
 
     # ZEUS
