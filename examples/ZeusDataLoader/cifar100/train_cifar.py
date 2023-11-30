@@ -190,10 +190,10 @@ def train(train_loader, model, criterion, optimizer, epoch, args, power_limit_op
     """Train the model for one epoch."""
     model.train()
     num_samples = len(train_loader) * args.batch_size
-    print("ns: ", num_samples)
+    print("length: ", len(train_loader))
 
     counter = 0
-    limit = int(num_samples * 0.44)
+    limit = int(len(train_loader) * 0.44)
     print("limit: ", limit)
     for batch_index, (images, labels) in enumerate(train_loader):
         print("counter: ", counter)
