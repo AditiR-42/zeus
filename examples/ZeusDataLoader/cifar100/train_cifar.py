@@ -193,9 +193,12 @@ def train(train_loader, model, criterion, optimizer, epoch, args, power_limit_op
     print("ns: ", num_samples)
 
     counter = 0
+    limit = int(num_samples * 0.44)
+    print("limit: ", limit)
     for batch_index, (images, labels) in enumerate(train_loader):
         print("counter: ", counter)
-        if counter > num_samples * 0.44:
+        if counter > limit:
+            print("skipped")
             continue
         # power_limit_optimizer.on_step_begin()
         labels = labels.cuda()
