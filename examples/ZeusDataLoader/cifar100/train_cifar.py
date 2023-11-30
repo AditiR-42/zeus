@@ -207,7 +207,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args, power_limit_op
         loss.backward()
         optimizer.step()
 
-        counter = (counter + 1) % 2
+        counter += 1
 
         # power_limit_optimizer.on_epoch_end() 
 
