@@ -28,7 +28,7 @@ def main(args: argparse.Namespace) -> None:
     for bs in args.batch_sizes:
         profile_path =f"{args.profile_folder}/{str(bs)}.json"
         os.system(
-            f"python train.py --profile True --profile_path {profile_path} --epochs {args.epochs} --batch_size {bs} --power_limits {power_limits}"
+            f"python train.py --zeus --profile True --profile_path {profile_path} --epochs {args.epochs} --batch_size {bs} --power_limits {power_limits}"
         )
 
     result = {}
