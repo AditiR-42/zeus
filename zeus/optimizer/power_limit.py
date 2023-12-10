@@ -298,13 +298,14 @@ class GlobalPowerLimitOptimizer(Callback):
 
         # Initialize JIT profiling states.
         if self.profile_path is None:
-            self.logger.info("JIT profiling enabled.")
-            self.logger.info("Will wait %d step(s) before profiling.", wait_steps)
-            self.state = Ready(
-                next_power_limit=self.power_limits[0], steps=wait_steps + 1
-            )
-            self.logger.info("Set power limit to the maximum before starting.")
-            self._set_power_limit(max(self.power_limits))
+            # self.logger.info("JIT profiling enabled.")
+            # self.logger.info("Will wait %d step(s) before profiling.", wait_steps)
+            # self.state = Ready(
+            #     next_power_limit=self.power_limits[0], steps=wait_steps + 1
+            # )
+            # self.logger.info("Set power limit to the maximum before starting.")
+            # self._set_power_limit(max(self.power_limits))
+            pass
         elif not self.profile_path.exists():
             self.logger.info(
                 "JIT Profiling enabled. Profile will be saved to '%s'.",
