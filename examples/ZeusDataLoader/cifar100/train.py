@@ -205,7 +205,8 @@ def train(train_loader, model, criterion, optimizer, epoch, args, power_limit_op
     for batch_index, (images, labels) in enumerate(train_loader):
         if counter > limit:
             continue
-        # power_limit_optimizer.on_step_begin()
+        if args.profile:
+            power_limit_optimizer.on_step_begin()
         labels = labels.cuda()
         images = images.cuda()
 
@@ -217,7 +218,8 @@ def train(train_loader, model, criterion, optimizer, epoch, args, power_limit_op
 
         counter += 1
 
-        # power_limit_optimizer.on_epoch_end() 
+        if args.profile:
+            power_limit_optimizer.on_epoch_end() 
 
         print(
             f"Training Epoch: {epoch} [{(batch_index + 1) * args.batch_size}/{num_samples}]"
