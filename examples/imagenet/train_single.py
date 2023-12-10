@@ -37,7 +37,7 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser = argparse.ArgumentParser(description="PyTorch ImageNet Training")
-    parser.add_argument("data", metavar="DIR", help="Path to the ImageNet directory")
+    parser.add_argument("--data", metavar="DIR", help="Path to the ImageNet directory")
     parser.add_argument(
         "-a",
         "--arch",
