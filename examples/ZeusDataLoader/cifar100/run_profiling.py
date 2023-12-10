@@ -33,7 +33,7 @@ def main(args: argparse.Namespace) -> None:
 
     result = {}
     for file in os.listdir(f"{args.profile_folder}"):
-        with open(file, 'r') as infile:
+        with open(f"{args.profile_folder}/{file}", 'r') as infile:
             result.update(json.load(infile))
         with open(f"{args.profile_folder}/profiling.json", 'w') as output_file:
             json.dump(result, output_file)
