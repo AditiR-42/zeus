@@ -58,6 +58,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--profile_path", type=str, default=None, help="Path for profiling"
     )
+    parser.add_argument(
+        "--power_limits", type=list, help="Define range of power limits"
+    )
 
     # ZEUS
     runtime_mode = parser.add_mutually_exclusive_group()
@@ -161,6 +164,7 @@ def main(args: argparse.Namespace) -> None:
         profile_steps=40,
         pl_step=50,
         profile_path=args.profile_path,
+        power_limits=args.power_limits,
     )
 
     # ZEUS
