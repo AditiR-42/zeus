@@ -223,7 +223,7 @@ class GlobalPowerLimitOptimizer(Callback):
         profile_steps: int = 40,
         pl_step: int = 25,
         profile_path: str | Path | None = None,
-        power_limits: list = None,
+        power_limits: list | None = None,
     ) -> None:
         r"""Initialize the optimizer.
 
@@ -263,7 +263,6 @@ class GlobalPowerLimitOptimizer(Callback):
         self.profile_path = (
             Path(profile_path) if isinstance(profile_path, str) else profile_path
         )
-        self.power_limits = [pl * 1000 for pl in power_limits]
 
         # Setup logging.
         self.logger = get_logger(type(self).__name__)
@@ -279,7 +278,7 @@ class GlobalPowerLimitOptimizer(Callback):
             pls.append(pynvml.nvmlDeviceGetPowerManagementLimitConstraints(device))
         if not all(pls[0] == pl for pl in pls):
             raise ValueError("Power limits ranges are not uniform across GPUs.")
-        self.power_limits = power_limits # g3s cifar instance
+        self.power_limits = [pl * 1000 for pl in power_limits] # g3s cifar instance
         # Turn on persistence mode and set to the highest power limit.
         try:
             for handle in self.handles:
