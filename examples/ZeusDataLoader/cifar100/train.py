@@ -159,7 +159,7 @@ def main(args: argparse.Namespace) -> None:
         ),
         warmup_steps=10,
         profile_steps=40,
-        pl_step=35,
+        pl_step=15,
         profile_path=args.profile_path,
     )
 
