@@ -223,8 +223,7 @@ class GlobalPowerLimitOptimizer(Callback):
         profile_steps: int = 40,
         pl_step: int = 25,
         profile_path: str | Path | None = None,
-        power_limits: list | None = None,
-        **kwargs
+        # power_limits: list | None = None,
     ) -> None:
         r"""Initialize the optimizer.
 
