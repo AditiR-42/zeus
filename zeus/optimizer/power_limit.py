@@ -276,7 +276,7 @@ class GlobalPowerLimitOptimizer(Callback):
             pls.append(pynvml.nvmlDeviceGetPowerManagementLimitConstraints(device))
         if not all(pls[0] == pl for pl in pls):
             raise ValueError("Power limits ranges are not uniform across GPUs.")
-        self.power_limits = [300, 250, 200, 150, 100] # g5 instance
+        self.power_limits = [300] # g5 instance
         # Turn on persistence mode and set to the highest power limit.
         try:
             for handle in self.handles:
