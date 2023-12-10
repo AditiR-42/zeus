@@ -47,8 +47,6 @@ from zeus.monitor import ZeusMonitor
 from zeus.util.logging import get_logger
 from zeus.util.metric import zeus_cost
 
-POWER_LIMITS = [300, 150, 200]
-
 class OptimumSelector(ABC):
     """Base class for optimum power limit selectors."""
 
@@ -446,7 +444,7 @@ class GlobalPowerLimitOptimizer(Callback):
             return
         for handle in self.handles:
             # pynvml.nvmlDeviceSetPowerManagementLimit(handle, power_limit)
-            os.system(f"nvidia-smi -pl {power_limit // 1000}")
+            os.system(f"nvidia-smi -pl {power_limit}")
         self.current_power_limit = power_limit
 
     def _compute_optimal_power_limit(self) -> int:
