@@ -164,7 +164,7 @@ def main(args: argparse.Namespace) -> None:
         profile_steps=40,
         pl_step=35,
         profile_path=args.profile_path,
-        power_limits = args.power_limits,
+        # power_limits = args.power_limits,
     )
 
     # ZEUS
