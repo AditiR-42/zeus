@@ -218,8 +218,8 @@ def train(train_loader, model, criterion, optimizer, epoch, args, power_limit_op
 
         counter += 1
 
-        if args.profile:
-            power_limit_optimizer.on_epoch_end() 
+        # if args.profile:
+        #     power_limit_optimizer.on_epoch_end() 
 
         print(
             f"Training Epoch: {epoch} [{(batch_index + 1) * args.batch_size}/{num_samples}]"
