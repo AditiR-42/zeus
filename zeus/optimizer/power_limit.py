@@ -276,7 +276,7 @@ class GlobalPowerLimitOptimizer(Callback):
             pls.append(pynvml.nvmlDeviceGetPowerManagementLimitConstraints(device))
         if not all(pls[0] == pl for pl in pls):
             raise ValueError("Power limits ranges are not uniform across GPUs.")
-        self.power_limits = [pl * 1000 for pl in POWER_LIMITS] # g3s cifar instance
+        self.power_limits = [300, 250, 200, 150, 100] # g5 instance
         # Turn on persistence mode and set to the highest power limit.
         try:
             for handle in self.handles:
@@ -444,7 +444,7 @@ class GlobalPowerLimitOptimizer(Callback):
             return
         for handle in self.handles:
             # pynvml.nvmlDeviceSetPowerManagementLimit(handle, power_limit)
-            os.system(f"nvidia-smi -pl {power_limit}")
+            os.system(f"nvidia-smi -pl {power_limit // 1000}")
         self.current_power_limit = power_limit
 
     def _compute_optimal_power_limit(self) -> int:
