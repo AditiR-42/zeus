@@ -263,6 +263,7 @@ class GlobalPowerLimitOptimizer(Callback):
         self.profile_path = (
             Path(profile_path) if isinstance(profile_path, str) else profile_path
         )
+        self.power_limits = [pl * 1000 for pl in power_limits]
 
         # Setup logging.
         self.logger = get_logger(type(self).__name__)
