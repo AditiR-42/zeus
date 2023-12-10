@@ -280,6 +280,7 @@ class GlobalPowerLimitOptimizer(Callback):
         if not all(pls[0] == pl for pl in pls):
             raise ValueError("Power limits ranges are not uniform across GPUs.")
         self.power_limits = [pl * 1000 for pl in POWER_LIMITS] # g3s cifar instance
+        print("power_limits: ", self.power_limits)
         # Turn on persistence mode and set to the highest power limit.
         try:
             for handle in self.handles:
