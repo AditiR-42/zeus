@@ -59,7 +59,7 @@ def parse_args() -> argparse.Namespace:
         "--profile_path", type=str, default=None, help="Path for profiling"
     )
     parser.add_argument(
-        "--power_limits", type=list, help="Define range of power limits"
+        "--power_limits", type=int, nargs="+", help="Define range of power limits", required=True
     )
 
     # ZEUS
