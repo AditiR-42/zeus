@@ -446,7 +446,7 @@ class GlobalPowerLimitOptimizer(Callback):
             return
         for handle in self.handles:
             # pynvml.nvmlDeviceSetPowerManagementLimit(handle, power_limit)
-            os.system(f"sudo nvidia-smi -pl {power_limit // 1000}")
+            os.system(f"nvidia-smi -pl {power_limit // 1000}")
         self.current_power_limit = power_limit
 
     def _compute_optimal_power_limit(self) -> int:
