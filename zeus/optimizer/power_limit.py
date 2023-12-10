@@ -307,7 +307,8 @@ class GlobalPowerLimitOptimizer(Callback):
             self.logger.info("Set power limit to the maximum before starting.")
             self._set_power_limit(max(self.power_limits))
         elif not self.profile_path.exists():
-            self.logger.info("power_limits: ", self.power_limits)
+            self.logger.info("power_limits: %s", str(self.power_limits))
+            self.logger.info("test")
             self.logger.info(
                 "JIT Profiling enabled. Profile will be saved to '%s'.",
                 str(self.profile_path),
