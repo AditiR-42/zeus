@@ -47,6 +47,7 @@ from zeus.monitor import ZeusMonitor
 from zeus.util.logging import get_logger
 from zeus.util.metric import zeus_cost
 
+POWER_LIMITS = [300]
 
 class OptimumSelector(ABC):
     """Base class for optimum power limit selectors."""
@@ -278,7 +279,7 @@ class GlobalPowerLimitOptimizer(Callback):
             pls.append(pynvml.nvmlDeviceGetPowerManagementLimitConstraints(device))
         if not all(pls[0] == pl for pl in pls):
             raise ValueError("Power limits ranges are not uniform across GPUs.")
-        self.power_limits = [pl * 1000 for pl in power_limits] # g3s cifar instance
+        self.power_limits = [pl * 1000 for pl in POWER_LIMITS] # g3s cifar instance
         # Turn on persistence mode and set to the highest power limit.
         try:
             for handle in self.handles:

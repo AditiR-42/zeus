@@ -110,9 +110,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--profile_path", type=str, default=None, help="Path for profiling"
     )
-    parser.add_argument(
-        "--power_limits", type=list, help="List of one or multiple power limits for training"
-    )
 
     return parser.parse_args()
 
@@ -199,7 +196,6 @@ def main():
         profile_steps=40,
         pl_step=25,
         profile_path=args.profile_path,
-        power_limits = args.power_limits,
     )
 
     for epoch in range(args.epochs):
