@@ -53,7 +53,7 @@ def parse_args() -> argparse.Namespace:
         "--seed", type=int, default=None, help="Random seed to use for training."
     )
     parser.add_argument(
-        "--profile", type=bool, default=False, help="Whether or not to run profiling"
+        "--profile", type=bool, default=None, help="Whether or not to run profiling"
     )
     parser.add_argument(
         "--profile_path", type=str, default=None, help="Path for profiling"
@@ -205,8 +205,8 @@ def train(train_loader, model, criterion, optimizer, epoch, args, power_limit_op
     for batch_index, (images, labels) in enumerate(train_loader):
         if counter > limit:
             continue
-        if args.profile:
-            power_limit_optimizer.on_step_begin()
+        # if args.profile:
+        #     power_limit_optimizer.on_step_begin()
         labels = labels.cuda()
         images = images.cuda()
 
@@ -217,9 +217,6 @@ def train(train_loader, model, criterion, optimizer, epoch, args, power_limit_op
         optimizer.step()
 
         counter += 1
-
-        # if args.profile:
-        #     power_limit_optimizer.on_epoch_end() 
 
         print(
             f"Training Epoch: {epoch} [{(batch_index + 1) * args.batch_size}/{num_samples}]"
