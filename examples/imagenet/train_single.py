@@ -203,9 +203,9 @@ def main():
     )
 
     for epoch in range(args.epochs):
-        plo.on_step_begin()
         train(train_loader, model, criterion, optimizer, epoch, args, plo)
-        plo.on_epoch_end()
+        if args.profile:
+            plo.on_epoch_end()
 
         acc1 = validate(val_loader, model, criterion, args)
         print(f"Top-1 accuracy: {acc1}")
@@ -234,7 +234,8 @@ def train(
 
     end = time.time()
     for i, (images, target) in enumerate(train_loader):
-        power_limit_optimizer.on_step_begin()  # Mark the beginning of one training step.
+        if args.profile:
+            power_limit_optimizer.on_step_begin()  # Mark the beginning of one training step.
 
         # Load data to GPU
         images = images.cuda(args.gpu, non_blocking=True)
@@ -257,8 +258,6 @@ def train(
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-
-        power_limit_optimizer.on_epoch_end()  # Mark the end of one training step.
 
         # measure elapsed time
         batch_time.update(time.time() - end)
