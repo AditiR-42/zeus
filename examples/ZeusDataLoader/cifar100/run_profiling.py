@@ -35,8 +35,12 @@ def main(args: argparse.Namespace) -> None:
     for file in os.listdir(f"{args.profile_folder}"):
         with open(f"{args.profile_folder}/{file}", 'r') as infile:
             result.update(json.load(infile))
-        with open(f"{args.profile_folder}/profiling.json", 'w') as output_file:
-            json.dump(result, output_file)
+            key = str(file)[:-5]
+            result[key] = result["measurements"]
+            del result["measurements"]
+    
+    with open(f"{args.profile_folder}/profiling.json", 'w') as output_file:
+        json.dump(result, output_file)
 
 if __name__ == "__main__":
     main(parse_args())
