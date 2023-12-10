@@ -30,5 +30,6 @@ def main(args: argparse.Namespace) -> None:
             f"python train.py --profile True --profile_path {profile_path} --epochs {args.epochs} --batch_size {bs} --power_limits {power_limits}"
         )
 
-
+if __name__ == "__main__":
+    main(parse_args())
     
