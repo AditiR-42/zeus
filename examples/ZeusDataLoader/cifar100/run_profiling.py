@@ -2,6 +2,7 @@
 
 import os
 import argparse
+import json
 
 def parse_args() -> argparse.Namespace:
     """Parse command line arguments."""
@@ -29,6 +30,13 @@ def main(args: argparse.Namespace) -> None:
         os.system(
             f"python train.py --profile True --profile_path {profile_path} --epochs {args.epochs} --batch_size {bs} --power_limits {power_limits}"
         )
+
+    result = {}
+    for file in os.listdir(f"{args.profile_folder}"):
+        with open(file, 'r') as infile:
+            result.update(json.load(infile))
+        with open(f"{args.profile_folder}/profiling.json", 'w') as output_file:
+            json.dump(result, output_file)
 
 if __name__ == "__main__":
     main(parse_args())
