@@ -105,10 +105,13 @@ def parse_args() -> argparse.Namespace:
         "--gpu", default=0, type=int, metavar="N", help="GPU id to use (default: 0)"
     )
     parser.add_argument(
-        "--profile", type=bool, default=False, help="Whether or not to run profiling"
+        "--profile", type=bool, default=None, help="Whether or not to run profiling"
     )
     parser.add_argument(
         "--profile_path", type=str, default=None, help="Path for profiling"
+    )
+    parser.add_argument(
+        "--power_limits", type=int, nargs="+", help="Define range of power limits", required=True
     )
 
     return parser.parse_args()
@@ -196,6 +199,7 @@ def main():
         profile_steps=40,
         pl_step=25,
         profile_path=args.profile_path,
+        power_limits=args.power_limits,
     )
 
     for epoch in range(args.epochs):
