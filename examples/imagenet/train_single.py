@@ -113,6 +113,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--power_limits", type=int, nargs="+", help="Define range of power limits", required=True
     )
+    parser.add_argument(
+        "--gpu_index", type=int, default=None, help="Which GPU is being run (0 is stronger, 1 is weaker)"
+    )
+    parser.add_argument(
+        "--gpu_split", type=int, default=100, help="Smaller percentage to be trained (0 to 100)"
+    )
 
     return parser.parse_args()
 
@@ -146,17 +152,29 @@ def main():
     normalize = transforms.Normalize(
         mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
     )
+
     train_dataset = datasets.ImageFolder(
-        traindir,
-        transforms.Compose(
-            [
-                transforms.RandomResizedCrop(224),
-                transforms.RandomHorizontalFlip(),
-                transforms.ToTensor(),
-                normalize,
-            ]
-        ),
-    )
+            traindir,
+            transforms.Compose(
+                [
+                    transforms.RandomResizedCrop(224),
+                    transforms.RandomHorizontalFlip(),
+                    transforms.ToTensor(),
+                    normalize,
+                ]
+            ),
+        )
+
+    # If training first GPU
+    if args.gpu_index and args.gpu_index == 0:
+        limit = int(len(train_dataset) * (args.gpu_split / 100))
+        train_dataset = torch.utils.data.Subset(train_dataset, range(0, limit))
+
+    # If training second GPU
+    elif args.gpu_index and args.gpu_index == 1:
+        limit = int(len(train_dataset) * (args.gpu_split / 100))
+        train_dataset = torch.utils.data.Subset(train_dataset, range(limit, len(train_dataset)))
+
     val_dataset = datasets.ImageFolder(
         valdir,
         transforms.Compose(

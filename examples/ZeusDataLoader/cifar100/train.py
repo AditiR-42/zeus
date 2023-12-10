@@ -64,7 +64,7 @@ def parse_args() -> argparse.Namespace:
         "--power_limits", type=int, nargs="+", help="Power limit for GPU", required=True
     )
     parser.add_argument(
-        "--gpu_index", type=int, default=None, help="Which GPU (0 or 1) is being run"
+        "--gpu_index", type=int, default=None, help="Which GPU is being run (0 is stronger, 1 is weaker)"
     )
     parser.add_argument(
         "--gpu_split", type=int, default=100, help="Smaller percentage to be trained (0 to 100)"
@@ -90,7 +90,6 @@ def main(args: argparse.Namespace) -> None:
     #       model = vars(torchvision.models)[args.arch](num_classes=100)
     model = get_model(args.arch)
 
-    # Prepare datasets.
     train_dataset = datasets.CIFAR100(
         root="data",
         train=True,
@@ -108,6 +107,18 @@ def main(args: argparse.Namespace) -> None:
             ]
         ),
     )
+
+    # If training first GPU
+    if args.gpu_index and args.gpu_index == 0:
+        limit = int(len(train_dataset) * (args.gpu_split / 100))
+        train_dataset = torch.utils.data.Subset(train_dataset, range(0, limit))
+
+    # If training second GPU
+    elif args.gpu_index and args.gpu_index == 1:
+        limit = int(len(train_dataset) * (args.gpu_split / 100))
+        train_dataset = torch.utils.data.Subset(train_dataset, range(limit, len(train_dataset)))
+    
+
     val_dataset = datasets.CIFAR100(
         root="data",
         train=False,
@@ -210,73 +221,22 @@ def train(train_loader, model, criterion, optimizer, epoch, args, power_limit_op
     length = len(train_loader)
     num_samples = length * args.batch_size
 
-    # Training first GPU
-    if args.gpu_index and args.gpu_index == 0:
-        counter = 0
-        limit = int(length * (args.gpu_split / 100))
-        for batch_index, (images, labels) in enumerate(train_loader):
-            if counter > limit:
-                continue
-            if args.profile:
-                power_limit_optimizer.on_step_begin()
-            labels = labels.cuda()
-            images = images.cuda()
+    for batch_index, (images, labels) in enumerate(train_loader):
+        if args.profile:
+            power_limit_optimizer.on_step_begin()
+        labels = labels.cuda()
+        images = images.cuda()
 
-            optimizer.zero_grad()
-            outputs = model(images)
-            loss = criterion(outputs, labels)
-            loss.backward()
-            optimizer.step()
+        optimizer.zero_grad()
+        outputs = model(images)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
 
-            counter += 1
-
-            print(
-                f"Training Epoch: {epoch} [{(batch_index + 1) * args.batch_size}/{num_samples}]"
-                f"\tLoss: {loss.item():0.4f}"
-            )
-    
-    # Training second GPU
-    elif args.gpu_index and args.gpu_index == 0:
-        counter = 0
-        limit = int(length * (args.gpu_split / 100))
-        for batch_index, (images, labels) in enumerate(train_loader):
-            if counter <= limit:
-                counter += 1
-                continue
-            if args.profile:
-                power_limit_optimizer.on_step_begin()
-            labels = labels.cuda()
-            images = images.cuda()
-
-            optimizer.zero_grad()
-            outputs = model(images)
-            loss = criterion(outputs, labels)
-            loss.backward()
-            optimizer.step()
-
-            print(
-                f"Training Epoch: {epoch} [{(batch_index + 1) * args.batch_size}/{num_samples}]"
-                f"\tLoss: {loss.item():0.4f}"
-            )
-
-    # No model sharding
-    else:
-        for batch_index, (images, labels) in enumerate(train_loader):
-            if args.profile:
-                power_limit_optimizer.on_step_begin()
-            labels = labels.cuda()
-            images = images.cuda()
-
-            optimizer.zero_grad()
-            outputs = model(images)
-            loss = criterion(outputs, labels)
-            loss.backward()
-            optimizer.step()
-
-            print(
-                f"Training Epoch: {epoch} [{(batch_index + 1) * args.batch_size}/{num_samples}]"
-                f"\tLoss: {loss.item():0.4f}"
-            )
+        print(
+            f"Training Epoch: {epoch} [{(batch_index + 1) * args.batch_size}/{num_samples}]"
+            f"\tLoss: {loss.item():0.4f}"
+        )
 
 @torch.no_grad()
 def validate(val_loader, model, criterion, epoch, args):

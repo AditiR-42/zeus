@@ -315,7 +315,7 @@ def main(args: argparse.Namespace) -> None:
     gpuPowerLimits = [gpu1_data["power_limit"].unique(), gpu2_data["power_limit"].unique()]
     avg_power_dfs = [avg_power_gpu1, avg_power_gpu2]
     time_per_epoch_dfs = [time_per_epoch_gpu1, time_per_epoch_gpu2]
-    gpuStrengths = [2,1]
+    gpuStrengths = [1,2]
     finalResults = runSimulation(gpuNames, gpuPowerLimits, avg_power_dfs, time_per_epoch_dfs, gpuStrengths)
 
     # Save the results to a csv file
