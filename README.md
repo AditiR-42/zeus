@@ -40,8 +40,15 @@ python zeus/examples/ZeusDataLoader/cifar100/run_profiling.py \
 ```
 
 or the following command for the Imagenet dataset:
+```
+python zeus/examples/imagenet/run_profiling.py \
+    --profile_folder NAME \
+    --epochs 1 \
+    --batch_sizes 32 64 128 256 512 \
+    --power_limits 70 65 60
+```
 
-The `profile_folder` should be a unique string, `epochs` can be set to 1, `batch_sizes` depend on the dataset, and `power_limits` depend on the GPU type. If needed, `warmup_step` and `profiling_steps` can also be edited via command-line arguments.
+The `profile_folder` should be a unique string, `epochs` can be set to 1, `batch_sizes` depend on the dataset, and `power_limits` depend on the GPU type. If needed, `warmup_step` and `profiling_steps` can also be edited via command-line arguments. For more information, see Determining Constants
 
 The example trace files generated (for Cifar100 and Imagenet on A10 and T4 GPUs) can be viewed in the [`trace_aws`](trace_aws) folder.
 
@@ -49,3 +56,16 @@ The example trace files generated (for Cifar100 and Imagenet on A10 and T4 GPUs)
 
 ### Training Dataset
 
+### Appendix
+
+#### Determining Constants
+
+#### Files of Interest
+- cifar100/train.py
+- cifar100/run_profiling.py
+- imagenet/train_single.py
+- imagenet/run_profiling.py
+- optimizer/power_limit.py
+- zeus_heterogeneous_detailed.ipynb
+- zeus_heterogeneous_algorithm.py
+- trace_aws
