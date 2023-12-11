@@ -23,5 +23,13 @@ docker run -it \
     mlenergy/zeus:latest \
     bash
 ```
+* If using Cifar100, setup is complete.
+* If using Imagenet, download the [Imagenet](https://www.kaggle.com/c/imagenet-object-localization-challenge/overview/description) dataset and add it as a volume to the docker container.
+* If using Sentiment140, download the [Sentiment140](https://www.kaggle.com/datasets/kazanova/sentiment140/data) dataset and add it as a volume to the docker container.
 
+### Generating Profiling
+
+### Running Algorithm
+
+### Training Dataset
 
