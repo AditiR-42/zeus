@@ -5,14 +5,15 @@ Training Energy Savings</h1>
 
 Zeus is a framework for (1) measuring GPU energy consumption and (2) optimizing energy and time for DNN training. A summary can be found [here](https://ml.energy/zeus/overview/), and the research paper for Zeus can be found [here](https://www.usenix.org/conference/nsdi23/presentation/you). 
 
-## Getting Started
+Zeus assumes 
+
+### Launching GPUs on AWS
 
 Refer to [Getting started](https://ml.energy/zeus/getting_started) for complete instructions on environment setup, installation, and integration.
 
-### Docker image
+### Setting up Zeus
 
-We provide a Docker image fully equipped with all dependencies and environments.
-The only command you need is:
+Run a docker container to set up Zeus. Some datasets will also require adding a volume to the run container command.
 
 ```sh
 docker run -it \
@@ -23,4 +24,4 @@ docker run -it \
     bash
 ```
 
-Refer to [Environment setup](https://ml.energy/zeus/getting_started/environment/) for details.
+
