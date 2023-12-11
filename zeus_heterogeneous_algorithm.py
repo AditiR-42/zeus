@@ -20,10 +20,10 @@ def parse_args() -> argparse.Namespace:
         "--gpu2", type=str, default="gpu2", help="Label for gpu 2"
     )
     parser.add_argument(
-        "--trace1", type=str, nargs="+", help="Path to trace file for gpu 1", required=True
+        "--trace1", type=str, help="Path to trace file for gpu 1", required=True
     )
     parser.add_argument(
-        "--trace2", type=str, nargs="+", help="Path to trace file for gpu 2", required=True
+        "--trace2", type=str, help="Path to trace file for gpu 2", required=True
     )
 
     return parser.parse_args()
