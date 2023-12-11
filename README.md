@@ -5,7 +5,7 @@ Training Energy Savings</h1>
 
 Zeus is a framework for (1) measuring GPU energy consumption and (2) optimizing energy and time for DNN training. A summary can be found [here](https://ml.energy/zeus/overview/), and the research paper for Zeus can be found [here](https://www.usenix.org/conference/nsdi23/presentation/you). 
 
-Zeus assumes 
+Zeus assumes that the same types of GPUs are used during DNN training. This extension accounts for heterogeneous GPUs used in DNN training, optimizing global batch size allocation and power limits across different types of GPUs.
 
 ### Launching GPUs on AWS
 
