@@ -1,4 +1,4 @@
-"""Run profiling for imagenet dataset"""
+"""Run profiling for Imagenet dataset"""
 
 import os
 import argparse
