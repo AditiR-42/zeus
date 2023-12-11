@@ -109,7 +109,7 @@ def main(args: argparse.Namespace) -> None:
     )
 
     # If training first GPU
-    if args.gpu_index == 0:
+    if args.gpu_index != None and args.gpu_index == 0:
         print("training gpu 1")
         limit = int(len(train_dataset) * (args.gpu_split / 100))
         print(len(train_dataset))
@@ -117,7 +117,7 @@ def main(args: argparse.Namespace) -> None:
         train_dataset = torch.utils.data.Subset(train_dataset, range(0, limit))
 
     # If training second GPU
-    elif args.gpu_index == 1:
+    elif args.gpu_index != None and args.gpu_index == 1:
         limit = int(len(train_dataset) * (args.gpu_split / 100))
         train_dataset = torch.utils.data.Subset(train_dataset, range(limit, len(train_dataset)))
     
