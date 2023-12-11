@@ -39,7 +39,6 @@ def load_json_data(filename):
     for k, val in data.items():
         for v in val:
             dataframe = dataframe.append({'batch_size' : int(k), 'power_limit': v['power_limit'], 'time_per_epoch': v['time'], 'average_power': v['energy'] / v['time']}, ignore_index=True)
-
     return dataframe
 
 # The below code fits a curve to the data and plots the curve on the same graph as the data
@@ -92,8 +91,7 @@ def fitcurveFunc(df, gpu):
         plt.legend(loc='upper right')
 
         # Print the parameters of the fitted function
-        print('Fitted Parameters:', params)
-    plt.show()
+        # print('Fitted Parameters:', params)
 
     avg_power_df = []
 
@@ -107,14 +105,13 @@ def fitcurveFunc(df, gpu):
         x_values = np.array(x_values)
         y_values = np.array(y_values)
 
-        # Define the function to fit (sum of exponentials)
-        def func(x, a, b, c,  d):
-            return a * np.exp(b * x + c) + d
+        # Define the function to fit
+        def func(x, c,  d, e):
+            return   c * x**2 + d * x + e
 
-        # Make a guess for the parameters
-        guess = (-1, -.05,  100, 20)
+       
         # Fit the function to the data
-        params, covariance = curve_fit(func, x_values, y_values, guess, maxfev=100000)
+        params, covariance = curve_fit(func, x_values, y_values, maxfev=100000)
 
         # Generate y values for the fitted curve
         y_fit = func(x_values, *params)
@@ -132,9 +129,8 @@ def fitcurveFunc(df, gpu):
         plt.legend(loc='upper right')
 
             # Print the parameters of the fitted function
-        print('Fitted Parameters:', params)
-    plt.show()
-
+        # print('Fitted Parameters:', params)
+    # plt.show()
     return time_per_epoch_df, avg_power_df
 
 # The below code finds the optimal allocaton of global batch size 4096 between the two GPUs
@@ -148,6 +144,7 @@ def fitcurveFunc(df, gpu):
 def findOptimalAllocation(power_limits_df1, power_limits_df2, gpuStrengths, naiveVersion, time_per_epoch_df1, time_per_epoch_df2, avg_power_df1, avg_power_df2):
     # Start time 
     start_time = time.time()
+    print("Finding optimal allocation begun")
     # Generate batch sizes from the above equations:
     batchsizes = range(0, 4096, 1)
     
@@ -180,12 +177,18 @@ def findOptimalAllocation(power_limits_df1, power_limits_df2, gpuStrengths, naiv
     fillBatchAndPower(0, 0 == maxGPU, naiveVersion)
     fillBatchAndPower(1, 1 == maxGPU, naiveVersion)
 
-    print(batch_and_power_df1)
+    print("Batch and power df created")
+
+    # print(batch_and_power_df1)
     results5 = {}
     global_batch_size = 4096
+    count = 0
     for b1, p1 in batch_and_power_df1:
         for b2, p2 in batch_and_power_df2:
             b = [b1, b2]
+            count += 1
+            if count % 10000000 == 0:
+                print(count, " iterations completed")
             if sum(b) == global_batch_size:
                 result = 0
                 for i, batch in enumerate(b):
@@ -193,7 +196,7 @@ def findOptimalAllocation(power_limits_df1, power_limits_df2, gpuStrengths, naiv
                         time_per_epoch = time_per_epoch_df1[p1][0] * batch**2 + time_per_epoch_df1[p1][1] * batch + time_per_epoch_df1[p1][2]
                         if time_per_epoch < 0:
                             time_per_epoch = 0 
-                        average_power = avg_power_df1[p1][0] * np.exp(avg_power_df1[p1][1] * batch + avg_power_df1[p1][2]) + avg_power_df1[p1][3]
+                        average_power = avg_power_df1[p1][0] * batch**2 + avg_power_df1[p1][1] * batch + avg_power_df1[p1][2]
                         if average_power < 0:
                             average_power = 0
                         
@@ -202,7 +205,7 @@ def findOptimalAllocation(power_limits_df1, power_limits_df2, gpuStrengths, naiv
                         time_per_epoch = time_per_epoch_df2[p2][0] * batch**2 + time_per_epoch_df2[p2][1] * batch + time_per_epoch_df2[p2][2]
                         if time_per_epoch < 0:
                             time_per_epoch = 0
-                        average_power = avg_power_df2[p2][0] * np.exp(avg_power_df2[p2][1] * batch + avg_power_df2[p2][2]) + avg_power_df2[p2][3]
+                        average_power = avg_power_df2[p2][0] * batch**2 + avg_power_df2[p2][1] * batch + avg_power_df2[p2][2]
                         if average_power < 0:
                             average_power = 0
                         power_limit = power_limits_df2[p2]
@@ -242,12 +245,15 @@ def runSimulation(gpuNames, gpuPowerLimits, avg_power_dfs, time_per_epoch_dfs, g
         power_limits_df2 = gpuPowerLimits[i2]
 
         # Run the simulation for the naive and non naive versions
+        print("Beginning naive algorithm")
         results5, time_taken = findOptimalAllocation(power_limits_df1, power_limits_df2, gpuStrength, True, time_per_epoch_df1, time_per_epoch_df2, avg_power_df1, avg_power_df2)
         finalResults = finalResults.append({'gpu1': gpu1, 'gpu2': gpu2, 'time': time_taken, 'naive': True, 'cost': min(results5.values()), 'topAllocation': sorted(results5.items(), key=lambda item: item[1])[0], 'maxCost': max(results5.values())}, ignore_index=True)
+        print("Finished naive algorithm")
+        print("Beginning non naive algorithm")
         results5, time_taken = findOptimalAllocation(power_limits_df1, power_limits_df2, gpuStrength, False, time_per_epoch_df1, time_per_epoch_df2, avg_power_df1, avg_power_df2)
         finalResults = finalResults.append({'gpu1': gpu1, 'gpu2': gpu2, 'time': time_taken, 'naive': False, 'cost': min(results5.values()), 'topAllocation': sorted(results5.items(), key=lambda item: item[1])[0], 'maxCost': max(results5.values())}, ignore_index=True)
-
-        print("Iteration completed")
+        print("Finished non naive algorithm")
+        
     return finalResults   
 
 # The below code calculates the baseline results for the two GPUs where we assume that the batches are split evenly between the GPUs
@@ -285,11 +291,11 @@ def calculateBaseline(gpuNames, gpuPowerLimits, avg_power_dfs, time_per_epoch_df
                     for i, batch in enumerate(b):
                         if i % 4 == 0:
                             time_per_epoch = time_per_epoch_df1[p1][0] * batch**2 + time_per_epoch_df1[p1][1] * batch + time_per_epoch_df1[p1][2]
-                            average_power = avg_power_df1[p1][0] * np.exp(avg_power_df1[p1][1] * batch + avg_power_df1[p1][2]) + avg_power_df1[p1][3]
+                            average_power = avg_power_df1[p1][0] * batch**2 + avg_power_df1[p1][1] * batch + avg_power_df1[p1][2]
                             power_limit = power_limits_df1[p1]
                         elif i % 4 == 1:
                             time_per_epoch = time_per_epoch_df2[p2][0] * batch**2 + time_per_epoch_df2[p2][1] * batch + time_per_epoch_df2[p2][2]
-                            average_power = avg_power_df2[p2][0] * np.exp(avg_power_df2[p2][1] * batch + avg_power_df2[p2][2]) + avg_power_df2[p2][3]
+                            average_power = avg_power_df2[p2][0] * batch**2 + avg_power_df2[p2][1] * batch + avg_power_df2[p2][2]
                             power_limit = power_limits_df2[p2]
                         
                     # Calculate the results:
@@ -311,7 +317,7 @@ def main(args: argparse.Namespace) -> None:
     time_per_epoch_gpu2, avg_power_gpu2 = fitcurveFunc(gpu2_data, args.gpu2)
 
     # Run the simulation for the two given GPUs
-    gpuNames = [args.gpu1, args.gpu1]
+    gpuNames = [args.gpu1, args.gpu2]
     gpuPowerLimits = [gpu1_data["power_limit"].unique(), gpu2_data["power_limit"].unique()]
     avg_power_dfs = [avg_power_gpu1, avg_power_gpu2]
     time_per_epoch_dfs = [time_per_epoch_gpu1, time_per_epoch_gpu2]
