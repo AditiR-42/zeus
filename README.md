@@ -17,7 +17,7 @@ We use AWS to simulate heterogeneous GPUs:
 
 Run a docker container to set up Zeus. Some datasets will also require adding a volume to the run container command.
 
-```bash
+```
 docker run -it \
     --gpus all                  `# Mount all GPUs` \
     --cap-add SYS_ADMIN         `# Needed to change the power limit of the GPU` \
@@ -31,10 +31,17 @@ docker run -it \
 ### Generating Profiling
 
 To generate profiling traces for each GPU, run the following command for the Cifar100 dataset:
+```
+python zeus/examples/ZeusDataLoader/cifar100/run_profiling.py \
+    --profile_folder NAME \
+    --epochs 1 \
+    --batch_sizes 32 64 128 256 512 1024 \
+    --power_limits 70 65 60
+```
 
 or the following command for the Imagenet dataset:
 
-The `profile_folder` should be a unique string, `epochs` can be set to 1, `batch_sizes` depend on the dataset, and `power_limits` depend on the GPU type.
+The `profile_folder` should be a unique string, `epochs` can be set to 1, `batch_sizes` depend on the dataset, and `power_limits` depend on the GPU type. If needed, `warmup_step` and `profiling_steps` can also be edited via command-line arguments.
 
 The example trace files generated (for Cifar100 and Imagenet on A10 and T4 GPUs) can be viewed in the [`trace_aws`](trace_aws) folder.
 
