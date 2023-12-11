@@ -61,11 +61,11 @@ The example trace files generated (for Cifar100 and Imagenet on A10 and T4 GPUs)
 #### Determining Constants
 
 #### Files of Interest
-- cifar100/train.py
-- cifar100/run_profiling.py
-- imagenet/train_single.py
-- imagenet/run_profiling.py
-- optimizer/power_limit.py
-- zeus_heterogeneous_detailed.ipynb
-- zeus_heterogeneous_algorithm.py
-- trace_aws
+- [`cifar100/train.py`](examples/ZeusDataLoader/cifar100/train.py)
+- [`cifar100/run_profiling.py`](examples/ZeusDataLoader/cifar100/profiling.py)
+- [`imagenet/train_single.py`](examples/imagenet/train_single.py)
+- [`imagenet/run_profiling.py`](examples/imagenet/run_profiling.py)
+- [`optimizer/power_limit.py`](zeus/optimizer/power_limit.py)
+- [`zeus_heterogeneous_detailed.ipynb`](zeus_heterogeneous_detailed.ipynb)
+- [`zeus_heterogeneous_algorithm.py`](zeus_heterogeneous_algorithm.py)
+- [`trace_aws`](trace_aws)
