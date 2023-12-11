@@ -220,6 +220,8 @@ def main():
         power_limits=args.power_limits,
     )
 
+    monitor.begin_window("imagenet_training")
+
     for epoch in range(args.epochs):
         train(train_loader, model, criterion, optimizer, epoch, args, plo)
         if args.profile:
@@ -229,6 +231,10 @@ def main():
         print(f"Top-1 accuracy: {acc1}")
 
         scheduler.step()
+
+    measurement = monitor.end_window("imagenet_training")
+    print(f"Time (s): {measurement.time}")
+    print(f"Energy (J): {measurement.total_energy}")
     ################################## The important part #####################################
 
 
