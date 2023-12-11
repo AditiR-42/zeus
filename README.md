@@ -17,7 +17,7 @@ We use AWS to simulate heterogeneous GPUs:
 
 Run a docker container to set up Zeus. Some datasets will also require adding a volume to the run container command.
 
-```sh
+```bash
 docker run -it \
     --gpus all                  `# Mount all GPUs` \
     --cap-add SYS_ADMIN         `# Needed to change the power limit of the GPU` \
@@ -29,6 +29,12 @@ docker run -it \
 * If using Imagenet, download the [Imagenet](https://www.kaggle.com/c/imagenet-object-localization-challenge/overview/description) dataset and add it as a volume to the docker container.
 
 ### Generating Profiling
+
+To generate profiling traces for each GPU, run the following command for the Cifar100 dataset:
+
+or the following command for the Imagenet dataset:
+
+The `profile_folder` should be a unique string, `epochs` can be set to 1, `batch_sizes` depend on the dataset, and `power_limits` depend on the GPU type.
 
 The example trace files generated (for Cifar100 and Imagenet on A10 and T4 GPUs) can be viewed in the [`trace_aws`](trace_aws) folder.
 
