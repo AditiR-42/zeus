@@ -68,7 +68,26 @@ python zeus_heterogeneous_algorithm.py --gpu1 NAME --gpu2 NAME --trace1 PATH --t
 
 The resulting output will show the optimal power limit and global batch size allocation for each GPU using the brute force, heuristic, and baseline methods.
 
-### Training Dataset
+### Training Model
+
+To train the model, run the following command for the Cifar100 dataset:
+```
+python examples/ZeusDataLoader/cifar100/train.py \
+    --epochs INT \
+    --power_limit INT \
+    --gpu_index INT \ 
+    --gpu_split INT 
+```
+
+or the following command for the Imagenet dataset:
+```
+python examples/imagenet/train_single.py \
+    --epochs INT \
+    --power_limit INT \
+    --gpu_index INT \ 
+    --gpu_split INT
+    --data /imagenet
+```
 
 ### Appendix
 
