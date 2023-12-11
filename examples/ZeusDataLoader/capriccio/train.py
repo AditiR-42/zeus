@@ -38,10 +38,6 @@ from transformers import (
 
 # ZEUS
 from zeus.run import ZeusDataLoader
-from zeus.optimizer import GlobalPowerLimitOptimizer
-from zeus.monitor import ZeusMonitor
-from zeus.optimizer.power_limit import MaxSlowdownConstraint
-from zeus.util.env import get_env
 
 logger = logging.getLogger(__name__)
 
@@ -133,27 +129,6 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--seed", type=int, default=None, help="A seed for reproducible training."
-    )
-    parser.add_argument(
-        "--profile", type=bool, default=None, help="Whether or not to run profiling"
-    )
-    parser.add_argument(
-        "--profile_path", type=str, default=None, help="Path for profiling"
-    )
-    parser.add_argument(
-        "--power_limits", type=int, nargs="+", help="Power limit for GPU", required=True
-    )
-    parser.add_argument(
-        "--gpu_index", type=int, default=None, help="Which GPU is being run (0 is stronger, 1 is weaker)"
-    )
-    parser.add_argument(
-        "--gpu_split", type=int, default=100, help="Smaller percentage to be trained (0 to 100)"
-    )
-    parser.add_argument(
-        "--warmup_steps", type=int, default=5, help="Warm up steps for profiling"
-    )
-    parser.add_argument(
-        "--profile_steps", type=int, default=10, help="Profile steps"
     )
     args = parser.parse_args()
 
@@ -257,14 +232,6 @@ def main() -> None:
     train_dataset = processed_datasets["train"]
     eval_dataset = processed_datasets["validation"]
 
-    if args.gpu_index != None and args.gpu_index == 0:
-        limit = int(len(train_dataset) * (args.gpu_split / 100))
-        train_dataset = processed_datasets["train"].iloc[0:limit]
-
-    elif args.gpu_index != None and args.gpu_index == 1:
-        limit = int(len(train_dataset) * (args.gpu_split / 100))
-        train_dataset = processed_datasets["train"].iloc[limit:len(train_dataset)]
-
     # Log a few random samples from the training set:
     for index in random.sample(range(len(train_dataset)), 3):
         logger.info("Sample %s of the training set: %s.", index, train_dataset[index])
@@ -326,20 +293,6 @@ def main() -> None:
     ]
     optimizer = AdamW(optimizer_grouped_parameters, lr=args.learning_rate)
 
-    monitor = ZeusMonitor(gpu_indices=[0])
-
-    plo = GlobalPowerLimitOptimizer(
-        monitor=monitor,
-        optimum_selector=MaxSlowdownConstraint(
-            factor=get_env("ZEUS_MAX_SLOWDOWN", float, 1.1),
-        ),
-        warmup_steps=args.warmup_steps,
-        profile_steps=args.profile_steps,
-        pl_step=50,
-        profile_path=args.profile_path,
-        power_limits=args.power_limits,
-    )
-
     # Send model to CUDA.
     model = model.cuda()
 
@@ -374,14 +327,8 @@ def main() -> None:
     else:
         epoch_iter = range(args.num_train_epochs)
 
-    monitor.begin_window("sentiment_training")
-
     for epoch in epoch_iter:
-        if args.profile:
-            plo.on_step_begin()
         model.train()
-        if args.profile:
-            plo.on_epoch_end()
         for batch in train_dataloader:
             for key, val in batch.items():
                 if torch.is_tensor(val):
@@ -424,10 +371,6 @@ def main() -> None:
                     epoch + 1,
                 )
                 break
-        
-    measurement = monitor.end_window("sentiment_training")
-    print(f"Time (s): {measurement.time}")
-    print(f"Energy (J): {measurement.total_energy}")
 
 
 if __name__ == "__main__":
