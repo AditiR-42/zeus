@@ -1,117 +1,9 @@
 <div align="center">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/img/logo_dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="docs/assets/img/logo_light.svg">
-  <img alt="Zeus logo" width="55%" src="docs/assets/img/logo_dark.svg">
-</picture>
-<h1>Deep Learning Energy Measurement and Optimization</h1>
+<h1>Zeus<sup>2</sup>: Implementing Structure for Heterogenous GPUs for DNN
+Training Energy Savings</h1>
 </div>
 
-[![NSDI23 paper](https://custom-icon-badges.herokuapp.com/badge/NSDI'23-paper-b31b1b.svg)](https://www.usenix.org/conference/nsdi23/presentation/you)
-[![Docker Hub](https://badgen.net/docker/pulls/symbioticlab/zeus?icon=docker&label=Docker%20pulls)](https://hub.docker.com/r/mlenergy/zeus)
-[![Slack workspace](https://badgen.net/badge/icon/Join%20workspace/611f69?icon=slack&label=Slack)](https://join.slack.com/t/zeus-ml/shared_invite/zt-1najba5mb-WExy7zoNTyaZZfTlUWoLLg)
-[![Homepage build](https://github.com/ml-energy/zeus/actions/workflows/deploy_homepage.yaml/badge.svg)](https://github.com/ml-energy/zeus/actions/workflows/deploy_homepage.yaml)
-[![Apache-2.0 License](https://custom-icon-badges.herokuapp.com/github/license/ml-energy/zeus?logo=law)](/LICENSE)
-
-
-Zeus is a framework for (1) measuring GPU energy consumption and (2) optimizing energy and time for DNN training.
-
-### Measuring GPU energy
-
-```python
-from zeus.monitor import ZeusMonitor
-
-monitor = ZeusMonitor(gpu_indices=[0,1,2,3])
-
-monitor.begin_window("heavy computation")
-# Four GPUs consuming energy like crazy!
-measurement = monitor.end_window("heavy computation")
-
-print(f"Energy: {measurement.total_energy} J")
-print(f"Time  : {measurement.time} s")
-```
-
-### Finding the optimal GPU power limit
-
-Zeus silently profiles different power limits during training and converges to the optimal one.
-
-```python
-from zeus.monitor import ZeusMonitor
-from zeus.optimizer import GlobalPowerLimitOptimizer
-
-monitor = ZeusMonitor(gpu_indices=[0,1,2,3])
-plo = GlobalPowerLimitOptimizer(monitor)
-
-plo.on_epoch_begin()
-
-for x, y in train_dataloader:
-    plo.on_step_begin()
-    # Learn from x and y!
-    plo.on_step_end()
-
-plo.on_epoch_end()
-```
-
-### CLI power and energy monitor
-
-```console
-$ python -m zeus.monitor power
-[2023-08-22 22:39:59,787] [PowerMonitor](power.py:134) Monitoring power usage of GPUs [0, 1, 2, 3]
-2023-08-22 22:40:00.800576
-{'GPU0': 66.176, 'GPU1': 68.792, 'GPU2': 66.898, 'GPU3': 67.53}
-2023-08-22 22:40:01.842590
-{'GPU0': 66.078, 'GPU1': 68.595, 'GPU2': 66.996, 'GPU3': 67.138}
-2023-08-22 22:40:02.845734
-{'GPU0': 66.078, 'GPU1': 68.693, 'GPU2': 66.898, 'GPU3': 67.236}
-2023-08-22 22:40:03.848818
-{'GPU0': 66.177, 'GPU1': 68.675, 'GPU2': 67.094, 'GPU3': 66.926}
-^C
-Total time (s): 4.421529293060303
-Total energy (J):
-{'GPU0': 198.52566362297537, 'GPU1': 206.22215216255188, 'GPU2': 201.08565518283845, 'GPU3': 201.79834523367884}
-```
-
-```console
-$ python -m zeus.monitor energy
-[2023-08-22 22:44:45,106] [ZeusMonitor](energy.py:157) Monitoring GPU [0, 1, 2, 3].
-[2023-08-22 22:44:46,210] [zeus.util.framework](framework.py:38) PyTorch with CUDA support is available.
-[2023-08-22 22:44:46,760] [ZeusMonitor](energy.py:329) Measurement window 'zeus.monitor.energy' started.
-^C[2023-08-22 22:44:50,205] [ZeusMonitor](energy.py:329) Measurement window 'zeus.monitor.energy' ended.
-Total energy (J):
-Measurement(time=3.4480526447296143, energy={0: 224.2969999909401, 1: 232.83799999952316, 2: 233.3100000023842, 3: 234.53700000047684})
-```
-
-Please refer to our NSDI’23 [paper](https://www.usenix.org/conference/nsdi23/presentation/you) and [slides](https://www.usenix.org/system/files/nsdi23_slides_chung.pdf) for details.
-Checkout [Overview](https://ml.energy/zeus/overview/) for a summary.
-
-Zeus is part of [The ML.ENERGY Initiative](https://ml.energy).
-
-## Repository Organization
-
-```
-.
-├── zeus/                # ⚡ Zeus Python package
-│   ├── optimizer/       #    - GPU energy and time optimizers
-│   ├── run/             #    - Tools for running Zeus on real training jobs
-│   ├── policy/          #    - Optimization policies and extension interfaces
-│   ├── util/            #    - Utility functions and classes
-│   ├── monitor.py       #    - `ZeusMonitor`: Measure GPU time and energy of any code block
-│   ├── controller.py    #    - Tools for controlling the flow of training
-│   ├── callback.py      #    - Base class for Hugging Face-like training callbacks.
-│   ├── simulate.py      #    - Tools for trace-driven simulation
-│   ├── analyze.py       #    - Analysis functions for power logs
-│   └── job.py           #    - Class for job specification
-│
-├── zeus_monitor/        # 🔌 GPU power monitor
-│   ├── zemo/            #    -  A header-only library for querying NVML
-│   └── main.cpp         #    -  Source code of the power monitor
-│
-├── examples/            # 🛠️ Examples of integrating Zeus
-│
-├── capriccio/           # 🌊 A drifting sentiment analysis dataset
-│
-└── trace/               # 🗃️ Train and power traces for various GPUs and DNNs
-```
+Zeus is a framework for (1) measuring GPU energy consumption and (2) optimizing energy and time for DNN training. A summary can be found [here](https://ml.energy/zeus/overview/), and the research paper for Zeus can be found [here](https://www.usenix.org/conference/nsdi23/presentation/you). 
 
 ## Getting Started
 
@@ -132,7 +24,3 @@ docker run -it \
 ```
 
 Refer to [Environment setup](https://ml.energy/zeus/getting_started/environment/) for details.
-
-
-## Contact
-Jae-Won Chung (jwnchung@umich.edu)
