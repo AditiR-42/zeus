@@ -19,6 +19,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--power_limits", type=int, nargs="+", help="Define range of power limits", required=True
     )
+    parser.add_argument(
+        "--warmup_steps", type=int, default=10, help="Warm up steps for profiling"
+    )
+    parser.add_argument(
+        "--profile_steps", type=int, default=40, help="Profile steps"
+    )
 
     return parser.parse_args()
 
@@ -28,7 +34,7 @@ def main(args: argparse.Namespace) -> None:
     for bs in args.batch_sizes:
         profile_path =f"{args.profile_folder}/{str(bs)}.json"
         os.system(
-            f"python train_single.py --profile True --profile_path {profile_path} --epochs {args.epochs} --batch_size {bs} --power_limits {power_limits} --data /imagenet"
+            f"python train_single.py --profile True --profile_path {profile_path} --epochs {args.epochs} --batch_size {bs} --power_limits {power_limits} --warmup_steps {args.warmup_steps} --profile_steps {args.profile_steps} --data /imagenet"
         )
 
     result = {}
