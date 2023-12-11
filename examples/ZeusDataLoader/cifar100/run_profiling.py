@@ -20,10 +20,10 @@ def parse_args() -> argparse.Namespace:
         "--power_limits", type=int, nargs="+", help="Define range of power limits", required=True
     )
     parser.add_argument(
-        "--warmup_steps", type=int, default=10, help="Warm up steps for profiling"
+        "--warmup_steps", type=int, default=5, help="Warm up steps for profiling"
     )
     parser.add_argument(
-        "--profile_steps", type=int, default=40, help="Profile steps"
+        "--profile_steps", type=int, default=10, help="Profile steps"
     )
 
     return parser.parse_args()

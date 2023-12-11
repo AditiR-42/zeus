@@ -70,10 +70,10 @@ def parse_args() -> argparse.Namespace:
         "--gpu_split", type=int, default=100, help="Smaller percentage to be trained (0 to 100)"
     )
     parser.add_argument(
-        "--warmup_steps", type=int, default=10, help="Warm up steps for profiling"
+        "--warmup_steps", type=int, default=5, help="Warm up steps for profiling"
     )
     parser.add_argument(
-        "--profile_steps", type=int, default=40, help="Profile steps"
+        "--profile_steps", type=int, default=10, help="Profile steps"
     )
 
     # ZEUS
