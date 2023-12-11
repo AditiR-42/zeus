@@ -48,7 +48,7 @@ python zeus/examples/imagenet/run_profiling.py \
     --power_limits 70 65 60
 ```
 
-The `profile_folder` should be a unique string, `epochs` can be set to 1, `batch_sizes` depend on the dataset, and `power_limits` depend on the GPU type. If needed, `warmup_step` and `profiling_steps` can also be edited via command-line arguments. For more information, see Determining Constants
+The `profile_folder` should be a unique string, `epochs` can be set to 1, `batch_sizes` depend on the dataset, and `power_limits` depend on the GPU type. If needed, `warmup_step` and `profiling_steps` can also be edited via command-line arguments. For more information on setting power limits and batch sizes, see [`Determining Constants`](https://github.com/AditiR-42/zeus_extension/blob/master/README.md#determining-constants).
 
 The example trace files generated (for Cifar100 and Imagenet on A10 and T4 GPUs) can be viewed in the [`trace_aws`](trace_aws) folder.
 
