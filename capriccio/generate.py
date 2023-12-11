@@ -41,9 +41,7 @@ def main(output_dir: str) -> None:
     # Prepare raw dataset
     print("Preparing raw dataset.")
     df = pd.read_csv("sentiment140.csv", encoding='ISO-8859-1')
-    df.rename(columns={"0": "target", "1467810369": "id", "Mon Apr 06 22:19:45 PDT 2009": "date", "NO_QUERY": "flag", "_TheSpecialOne_": "user", "@switchfoot http://twitpic.com/2y1zl - Awww, that's a bummer.  You shoulda got David Carr of Third Day to do it. ;D": "text"}, inplace=True)
-    print(df.columns)
-    print(df[0:5])
+    df.rename(columns={"0": "sentiment", "1467810369": "id", "Mon Apr 06 22:19:45 PDT 2009": "date", "NO_QUERY": "query", "_TheSpecialOne_": "user", "@switchfoot http://twitpic.com/2y1zl - Awww, that's a bummer.  You shoulda got David Carr of Third Day to do it. ;D": "text"}, inplace=True)
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore")
         df["date"] = pd.to_datetime(df.date)
