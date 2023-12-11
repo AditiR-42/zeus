@@ -40,7 +40,7 @@ def main(output_dir: str) -> None:
     """Run the main routine."""
     # Prepare raw dataset
     print("Preparing raw dataset.")
-    df = pandas.read_csv("sentiment140.csv")
+    df = pd.read_csv("sentiment140.csv")
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore")
         df["date"] = pd.to_datetime(df.date)
