@@ -95,6 +95,9 @@ The train files will automatically shard the model across the two GPUs according
 ### Appendix
 
 #### Determining Constants
+Power limits depend on the GPU. To determine which power limits to use for profiling, run `nvidia-smi -pl 0` to see the minimum and maximum power limits. For A10, we used power limits of [300, 250, 200, 150, 100]. For T4, we used [70, 65, 60].
+
+Batch size depends on the model, or dataset. To determine which batch sizes to use, experiment with the training file to see how large of a batch size is possible for that particular model. Batch size should generally ncrease by powers of 2. For Cifar100, we used batch sizes of [32, 64, 128, 256, 512, 1024]. For Imagenet, we used batch sizes of [32, 64, 128, 256, 512].
 
 #### Files of Interest
 - [`cifar100/train.py`](examples/ZeusDataLoader/cifar100/train.py)
