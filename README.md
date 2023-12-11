@@ -26,7 +26,7 @@ docker run -it \
     bash
 ```
 
-Inside the docker container, clone this repository. Replace all Files of Interest inside `zeus` with the files from `zeus_extension`.
+Inside the docker container, clone this repository. Replace any [`Files of Interest`](https://github.com/AditiR-42/zeus_extension/blob/master/README.md#files-of-interest) inside `zeus` with the files from `zeus_extension`.
 ```
 git clone https://github.com/AditiR-42/zeus_extension.git
 ```
