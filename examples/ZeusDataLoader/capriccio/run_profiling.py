@@ -26,10 +26,10 @@ def parse_args() -> argparse.Namespace:
         "--profile_steps", type=int, default=10, help="Profile steps"
     )
     parser.add_argument(
-        "--data_dir", type=str, default="workspace/zeus/capriccio/data", help="Profile steps"
+        "--data_dir", type=str, default="workspace/zeus/capriccio/data", help="Data directory"
     )
     parser.add_argument(
-        "--slice_number", type=int, default=9, help="Profile steps"
+        "--slice_number", type=int, default=9, help="Slice number"
     )
 
     return parser.parse_args()
@@ -40,7 +40,7 @@ def main(args: argparse.Namespace) -> None:
     for bs in args.batch_sizes:
         profile_path =f"{args.profile_folder}/{str(bs)}.json"
         os.system(
-            f"python train.py --profile True --profile_path {profile_path} --epochs {args.epochs} --batch_size {bs} --power_limits {power_limits} --warmup_steps {args.warmup_steps} --profile_steps {args.profile_steps} --data_dir {args.data_dir} --slice_number {args.slice_number} --model_name_or_path bert-base-uncased"
+            f"python train.py --profile True --profile_path {profile_path} --num_train_epochs {args.epochs} --batch_size {bs} --power_limits {power_limits} --warmup_steps {args.warmup_steps} --profile_steps {args.profile_steps} --data_dir {args.data_dir} --slice_number {args.slice_number} --model_name_or_path bert-base-uncased"
         )
 
     result = {}
