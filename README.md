@@ -90,6 +90,8 @@ python examples/imagenet/train_single.py \
 ```
 The `epochs` are user-defined (or can be the default). The `power_limit` should be the optimal power limit obtained from the algorithm output in the previous step. The `gpu_split` is determined by calculating how much of the global batch size is allocated to the stronger GPU. The `gpu_index` should be 0 for the GPU with the smaller workload and 1 for the GPU with the larger workload. For example, a 40-60 workload split would mean `gpu_split` is 40 for both GPUs and `gpu_index` is 0 and 1 for the respective GPUs.
 
+The train files will automatically shard the model across the two GPUs according to the `gpu_split`. The final output of the train files will be the `Time (s)` taken and `Energy (J)` consumed during training. These results can then be compared across the baseline and heuristic methods. 
+
 ### Appendix
 
 #### Determining Constants
