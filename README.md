@@ -9,7 +9,9 @@ Zeus assumes that the same types of GPUs are used during DNN training. This exte
 
 ### Launching GPUs on AWS
 
-Refer to [Getting started](https://ml.energy/zeus/getting_started) for complete instructions on environment setup, installation, and integration.
+We use AWS to simulate heterogeneous GPUs:
+1. Launch 2 different EC2 instances. We used g5 and g4dn instances, which correspond to Nvidia A10 and Nvidia T4 GPUs.
+2. Select a Deep Learning OSS Nvidia Driver. We selected AMI GPU PyTorch 2.1.0 (Ubuntu 20.04).
 
 ### Setting up Zeus
 
