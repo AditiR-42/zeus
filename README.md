@@ -60,6 +60,14 @@ The example trace files generated (for Cifar100 and Imagenet on A10 and T4 GPUs)
 
 ### Running Algorithm
 
+Determine which of the two GPUs is stronger using peta-flop characteristics from their datasheets. In our case, A10 is stronger than T4. Then run the following code, ensuring that gpu1 and trace1 correspond to the stronger of the two GPUs.
+
+```
+python zeus_heterogeneous_algorithm.py --gpu1 NAME --gpu2 NAME --trace1 PATH --trace2 PATH
+```
+
+The resulting output will show the optimal power limit and global batch size allocation for each GPU using the brute force, heuristic, and baseline methods.
+
 ### Training Dataset
 
 ### Appendix
