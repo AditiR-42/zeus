@@ -119,6 +119,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--gpu_split", type=int, default=100, help="Smaller percentage to be trained (0 to 100)"
     )
+    parser.add_argument(
+        "--warmup_steps", type=int, default=10, help="Warm up steps for profiling"
+    )
+    parser.add_argument(
+        "--profile_steps", type=int, default=40, help="Profile steps"
+    )
 
     return parser.parse_args()
 
@@ -213,8 +219,8 @@ def main():
         optimum_selector=MaxSlowdownConstraint(
             factor=get_env("ZEUS_MAX_SLOWDOWN", float, 1.1),
         ),
-        warmup_steps=10,
-        profile_steps=40,
+        warmup_steps=args.warmup_steps,
+        profile_steps=args.profile_steps,
         pl_step=25,
         profile_path=args.profile_path,
         power_limits=args.power_limits,
