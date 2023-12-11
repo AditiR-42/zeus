@@ -30,6 +30,8 @@ docker run -it \
 
 ### Generating Profiling
 
+The example trace files generated (for Cifar100 and Imagenet on A10 and T4 GPUs) can be viewed in the [`trace_aws`](trace_aws) folder.
+
 ### Running Algorithm
 
 ### Training Dataset
