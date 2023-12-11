@@ -41,7 +41,7 @@ def main(output_dir: str) -> None:
     # Prepare raw dataset
     print("Preparing raw dataset.")
     df = pd.read_csv("sentiment140.csv", encoding='ISO-8859-1')
-    print(df.head())
+    print(df.columns)
     print(df[0:5])
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore")
