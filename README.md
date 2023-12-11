@@ -25,6 +25,12 @@ docker run -it \
     mlenergy/zeus:latest \
     bash
 ```
+
+Inside the docker container, clone this repository. Replace all Files of Interest inside `zeus` with the files from `zeus_extension`.
+```
+git clone https://github.com/AditiR-42/zeus_extension.git
+```
+
 * If using Cifar100, setup is complete.
 * If using Imagenet, download the [Imagenet](https://www.kaggle.com/c/imagenet-object-localization-challenge/overview/description) dataset and add it as a volume to the docker container.
 
