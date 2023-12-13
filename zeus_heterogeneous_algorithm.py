@@ -38,7 +38,7 @@ def load_json_data(filename):
 
     for k, val in data.items():
         for v in val:
-            dataframe = dataframe.concat({'batch_size' : int(k), 'power_limit': v['power_limit'], 'time_per_epoch': v['time'], 'average_power': v['energy'] / v['time']}, ignore_index=True)
+            dataframe = dataframe.append({'batch_size' : int(k), 'power_limit': v['power_limit'], 'time_per_epoch': v['time'], 'average_power': v['energy'] / v['time']}, ignore_index=True)
     return dataframe
 
 # The below code fits a curve to the data and plots the curve on the same graph as the data
@@ -77,7 +77,7 @@ def fitcurveFunc(df, gpu):
         # Generate y values for the fitted curve
         y_fit = func(x_values, *params)
 
-        time_per_epoch_df.concat(params)
+        time_per_epoch_df.append(params)
 
         # Plot the original points and the fitted curve on the same graph
         # Vary the color depending on the power limit
@@ -114,7 +114,7 @@ def fitcurveFunc(df, gpu):
         # Generate y values for the fitted curve
         y_fit = func(x_values, *params)
 
-        avg_power_df.concat(params)
+        avg_power_df.append(params)
 
         # Plot the original points and the fitted curve on the same graph
         # Vary the color depending on the power limit
@@ -154,20 +154,20 @@ def findOptimalAllocation(power_limits_df1, power_limits_df2, gpuStrengths, naiv
             if not naiveVersion and isMaximum:
                 minPower = min(power_limits_df1)
                 for b in batchsizes:
-                    batch_and_power_df1.concat((b, list(power_limits_df1).index(minPower)))
+                    batch_and_power_df1.append((b, list(power_limits_df1).index(minPower)))
             else:
                 for b in batchsizes:
                     for i in range(len(power_limits_df1)):
-                        batch_and_power_df1.concat((b, i))
+                        batch_and_power_df1.append((b, i))
         elif gpuType == 1:
             if not naiveVersion and isMaximum:
                 minPower = min(power_limits_df2)
                 for b in batchsizes:
-                    batch_and_power_df2.concat((b, list(power_limits_df2).index(minPower)))
+                    batch_and_power_df2.append((b, list(power_limits_df2).index(minPower)))
             else:
                 for b in batchsizes:
                     for i in range(len(power_limits_df2)):
-                        batch_and_power_df2.concat((b, i))
+                        batch_and_power_df2.append((b, i))
     
     fillBatchAndPower(0, 0 == maxGPU, naiveVersion)
     fillBatchAndPower(1, 1 == maxGPU, naiveVersion)
@@ -242,17 +242,17 @@ def runSimulation(gpuNames, gpuPowerLimits, avg_power_dfs, time_per_epoch_dfs, g
         # Run the simulation for the naive and non naive versions
         print("Beginning naive algorithm")
         results5, time_taken = findOptimalAllocation(power_limits_df1, power_limits_df2, gpuStrength, True, time_per_epoch_df1, time_per_epoch_df2, avg_power_df1, avg_power_df2)
-        finalResults = finalResults.concat({'gpu1': gpu1, 'gpu2': gpu2, 'time': time_taken, 'type': 'naive',  'cost': min(results5.values()), 'topAllocation': sorted(results5.items(), key=lambda item: item[1])[0], 'maxCost': max(results5.values())}, ignore_index=True)
+        finalResults = finalResults.append({'gpu1': gpu1, 'gpu2': gpu2, 'time': time_taken, 'type': 'naive',  'cost': min(results5.values()), 'topAllocation': sorted(results5.items(), key=lambda item: item[1])[0], 'maxCost': max(results5.values())}, ignore_index=True)
         print("Finished naive algorithm")
         print("Beginning non naive algorithm")
         results5, time_taken = findOptimalAllocation(power_limits_df1, power_limits_df2, gpuStrength, False, time_per_epoch_df1, time_per_epoch_df2, avg_power_df1, avg_power_df2)
-        finalResults = finalResults.concat({'gpu1': gpu1, 'gpu2': gpu2, 'time': time_taken, 'type': 'heuristic',  'cost': min(results5.values()), 'topAllocation': sorted(results5.items(), key=lambda item: item[1])[0], 'maxCost': max(results5.values())}, ignore_index=True)
+        finalResults = finalResults.append({'gpu1': gpu1, 'gpu2': gpu2, 'time': time_taken, 'type': 'heuristic',  'cost': min(results5.values()), 'topAllocation': sorted(results5.items(), key=lambda item: item[1])[0], 'maxCost': max(results5.values())}, ignore_index=True)
         print("Finished non naive algorithm")
 
         print("Beginning baseline algorithm")
         baselineResults = calculateBaseline(power_limits_df1, power_limits_df2,time_per_epoch_df1, time_per_epoch_df2, avg_power_df1, avg_power_df2)
         print("Finished baseline algorithm")
-        finalResults = finalResults.concat({'gpu1': gpu1, 'gpu2': gpu2, 'time': time_taken, 'type': 'baseline', 'cost': min(baselineResults.values()), 'topAllocation': sorted(baselineResults.items(), key=lambda item: item[1])[0], 'maxCost': max(baselineResults.values())}, ignore_index=True)
+        finalResults = finalResults.append({'gpu1': gpu1, 'gpu2': gpu2, 'time': time_taken, 'type': 'baseline', 'cost': min(baselineResults.values()), 'topAllocation': sorted(baselineResults.items(), key=lambda item: item[1])[0], 'maxCost': max(baselineResults.values())}, ignore_index=True)
 
     return finalResults   
 
@@ -270,10 +270,10 @@ def calculateBaseline(power_limits_df1, power_limits_df2, time_per_epoch_df1, ti
     def fillBatchAndPower(gpuType):
         if gpuType == 0:
             for i in range(len(power_limits_df1)):
-                batch_and_power_df1.concat((2048, i))
+                batch_and_power_df1.append((2048, i))
         elif gpuType == 1:
             for i in range(len(power_limits_df2)):
-                batch_and_power_df2.concat((2048, i))
+                batch_and_power_df2.append((2048, i))
     
     fillBatchAndPower(0)
     fillBatchAndPower(1)
